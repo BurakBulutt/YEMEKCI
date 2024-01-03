@@ -1,0 +1,109 @@
+﻿@using YEMEKCI.Models
+@model List<Address>
+@{
+    ViewBag.Title = "Adres Getir";
+    Layout = "~/Views/Shared/_LayoutWeb.cshtml";
+}
+
+<div style="margin: 40px 0px 0px 50px;">
+
+    <h2 style="font-weight: 600; color:#f8a920; margin-bottom:20px">Adreslerim</h2>
+
+    @section head{
+        <style>
+            .hata {
+                color: red;
+            }
+        </style>
+    }
+
+    @section body{
+        <!-- Modal -->
+        <div class="modal fade" id="addressSilModal" tabindex="-1" role="dialog" aria-labelledby="addressSilModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addressSilModal">ADRES SIL</h5>
+                    </div>
+                    <div class="modal-body">
+                        <p class="mesaj"></p>
+                        <p class="hata"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+                        <button type="button" class="btn btn-dark addressSil">Evet</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    <div>
+        <table class="table table-striped">
+            <thead>
+                <tr">
+                    <th class="text-decoration-underline">ADRES ID</th>
+                    <th class="text-decoration-underline">SEHİR</th>
+                    <th class="text-decoration-underline">İLÇE</th>
+                    <th class="text-decoration-underline">POSTA KODU</th>
+                    <th class="text-decoration-underline">AÇIK ADRES</th>
+                    <th class="text-decoration-underline">SİL</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Address ad in Model)
+                {
+                    <tr>
+                        <td>@ad.ID</td>
+                        <td>@ad.city</td>
+                        <td>@ad.district</td>
+                        <td>@ad.postalCode</td>
+                        <td>@ad.address1</td>
+                        <td><a href="#" data-toggle="modal" data-target="#addressSilModal" data-adsID="@ad.ID" class="btn btn-danger adsSil">Sil</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div><a class="btn btn-success" href="/Address/AddressEkleCustomer/@ViewBag.customerId">Adres Ekle</a></div>
+
+
+</div>
+
+@section scripts{
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+    <script>
+        $(".adsSil").click(
+            function () {
+                $(".modal-body>p.hata").html = "";
+                var adsID = $(this).attr("data-adsID");
+                $(".modal-body>p.mesaj").html(adsID + " silinsin mi?");
+                $(".addressSil").data("adsID", adsID);
+            }
+        );
+
+        $(".addressSil").click(
+            function () {
+                var id = $(this).data("adsID");
+
+                $.ajax(
+                    {
+                        type: "POST",
+                        url: "/Address/AddressSil/" + id,
+                        success: function (param) {
+                            if (param == 1) {
+                                window.location.replace("/Address/Index");
+                            }
+                            else {
+                                $(".modal-body>p.hata").html("Hata !!!");
+                            }
+                        }
+                    }
+                );
+            }
+        );
+    </script>
+
+}

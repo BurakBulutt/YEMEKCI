@@ -1,0 +1,122 @@
+﻿@using YEMEKCI.Models
+@model Restaurant
+
+@{
+    ViewBag.Title = "Restoran Yemekleri";
+    Layout = "~/Views/Shared/_LayoutWeb.cshtml";
+}
+@section head{
+    <style>
+        .hata {
+            color: red;
+        }
+    </style>
+}
+
+
+@section body{
+    <!-- Modal -->
+    <div class="modal fade" id="sepeteEkleModal" tabindex="-1" role="dialog" aria-labelledby="sepeteEkleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="sepeteEkleModalLabel">SEPETE EKLE</h5>
+                </div>
+                <div class="modal-body">
+                    <p class="mesaj"></p>
+                    <p class="hata"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+                    <button type="button" class="btn btn-dark sepeteEkle">Evet</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+<div style="margin: 40px 50px 0px 50px;">
+
+    <h3 style="font-weight: 600; color:#f8a920; margin-bottom:20px">@Model.name </h3>
+
+
+
+    <div style="display:flex; gap:40px;">
+
+        @if (ViewBag.yemeksler.Count == 0)
+        {
+            <p> RESTORAN BULUNAMADI !</p>
+        }
+        else
+        {
+            foreach (Dish d in ViewBag.yemeksler as List<Dish>)
+            {
+                var authTicket = ((FormsIdentity)HttpContext.Current.User.Identity).Ticket;
+                string[] userData = authTicket.UserData.Split('|'); // Kullanıcıya özgü verileri ayrıştır
+                int userID = int.Parse(userData[2]);
+
+                <div class="shadow rounded-3">
+                    <img style="width:350px; height:200px; padding:20px 35px 20px 35px; border-radius:38px" src="~/Admin_Contents/assets/img/restoran.jpg">
+                    <div>
+                        <div class="text-center my-3">
+                            <h5 class="fw-bolder">@d.name</h5>
+                            <span style="color:#5D47C2; font-weight:600"> @Math.Round(@d.unit_price, 2)₺</span>
+                        </div>
+                    </div>
+                    <div class="text-center"><a class="btn px-4 btn-dark mb-4 mt-2 sptEkle" data-toggle="modal" data-target="#sepeteEkleModal" data-sptID="@userID" data-id="@d.ID" data-dishName="@d.name" href="#!">Sepete Ekle</a></div>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+
+@section scripts{
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+    <script>
+        $(".sptEkle").click(
+            function () {
+                $(".modal-body>p.hata").html = "";
+                var dishName = $(this).attr("data-dishName");
+                $(".modal-body>p.mesaj").html(dishName + " Sepete eklensin mi ?");
+                var dishID = $(this).attr("data-id");
+                var userID = $(this).attr("data-sptID");
+                $(".sepeteEkle").data("dishID", dishID);
+                $(".sepeteEkle").data("userID", userID);
+            }
+        );
+
+        $(".sepeteEkle").click(
+            function () {
+                var dishID = $(this).data("dishID");
+                var userID = $(this).data("userID");
+
+                $.ajax(
+                    {
+                        type: "POST",
+                        url: "/Sepet/SepeteUrunEkleMusteri/",
+                        data: {
+                            id: userID, // İkinci veriyi istek verilerine ekleyin
+                            dishID: dishID // id değerini istek verilerine ekleyin
+                        },
+                        success: function (param) {
+                            if (param == 1) {
+                                window.location.replace("");
+                            }
+                            else {
+                                $(".modal-body>p.hata").html("Hata !!!");
+                            }
+                        }
+                    }
+                );
+            }
+        );
+    </script>
+
+}
+
+

@@ -1,0 +1,123 @@
+﻿@using YEMEKCI.Models
+@model List<Cart>
+
+@{
+    ViewBag.Title = "SEPET";
+}
+
+
+<div style="margin: 40px 50px 0px 50px;">
+
+    <h3 style="font-weight: 600; color:#f8a920; margin-bottom:20px">Sepet</h3>
+
+    @section body
+{
+        <!-- Modal -->
+        <div class="modal fade" id="myModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Sepetteki Ürünler</h4>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>SEPET ID</th>
+                                    <th>SEPET KULLANICISI</th>
+                                    <th>YEMEK</th>
+                                    <th>ADET</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dataBody">
+                                <!-- Burada Ajax ile tablo içeriği doldurulacak -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Kapat</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+
+    <div>
+        <table class="table table-striped">
+            <thead>
+                <tr class="text-decoration-underline">
+                    <th>SEPET ID </th>
+                    <th>KULLLANICI ID</th>
+                    <th>KULLLANICI ADI</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Cart c in Model)
+                {
+                    <tr>
+                        <td>@c.ID</td>
+                        <td>@c.customerID</td>
+                        <td>@c.Customer.name @c.Customer.surname</td>
+                        <td><a class="btn btn-dark btnShowModal" data-toggle="modal" data-target="#myModal" data-id="@c.ID" href="#!">Sepeti Göster</a></td>
+                        <td><a class="btn btn-success" href="/Sepet/GetSepetUrunleri/@c.customerID">Sepeti İçeriğini Güncelle</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+@section scripts{
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+    <script>
+        // Buttona tıklandığında modalı açan fonksiyon
+        $('.btnShowModal').click(function () {
+            var id = $(this).attr("data-id");
+            $.ajax({
+                url: "/Sepet/SepetUrunleri/" + id,
+                type: 'GET',
+                data: { id: id },
+                dataType: 'json',
+                success: function (data) {
+                    var tableContent = '';
+                    $.each(data, function (index, item) {
+                        tableContent += '<tr>';
+                        tableContent += '<td>' + item.ID + '</td>';
+                        tableContent += '<td>' + item.cartID + '</td>';
+                        tableContent += '<td>' + item.cartCustomer + '</td>';
+                        tableContent += '<td>' + item.dishName + '</td>';
+                        tableContent += '<td>' + item.quantity + '</td>';
+                        tableContent += '</tr>';
+                    });
+                    $('#dataBody').html(tableContent);
+
+
+                    $('#myModal').modal('show');
+
+                    // Modalı programatik olarak kapat
+                    $('#btnModalClose').click(function () {
+                        $('#myModal').modal('hide');
+                    });
+                },
+                error: function () {
+                    alert('Veriler alınırken hata oluştu.');
+                }
+            });
+        });
+    </script>
+}
+
+
+
+
+
+
+
+
+

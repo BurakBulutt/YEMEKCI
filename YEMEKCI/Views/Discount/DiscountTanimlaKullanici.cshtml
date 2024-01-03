@@ -1,0 +1,130 @@
+﻿@using YEMEKCI.Models
+
+@{
+    ViewBag.Title = "KULLANICIYA HEDIYE KUPONU TANIMLA";
+    Layout = "~/Views/Shared/_LayoutWeb.cshtml";
+}
+
+
+@section head
+    {
+    <style>
+        .modal-success .modal-content {
+            border-color: #28a745;
+        }
+
+        .modal-error .modal-content {
+            border-color: #dc3545;
+        }
+    </style>
+}
+
+
+
+<div style="margin: 40px 50px 0px 50px;">
+
+    <h3 style="font-weight: 600; color:#f8a920; margin-bottom:20px">Kullanıcıya Hediye Kupon Tanımla</h3>
+
+    @section body
+    {
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">İşlem Sonucu</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p id="modalMessage">Mesaj burada görünecek.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-suc" data-bs-dismiss="modal">Kapat</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    }
+
+    <form id="hediyeForm">
+        <div class="form-group">
+            <label class="pb-1 fw-bold">Kullanıcılar:</label> <br />
+            <select class="form-select-list" multiple id="selectedMusteri" name="selectedMusteri">
+                @foreach (Customer c in ViewBag.Customer as List<Customer>)
+                {
+                    <option value="@c.ID">@c.name @c.surname</option>
+                }
+                <!-- Diğer müşterilerin option'ları -->
+            </select>
+        </div>
+
+        <div class="form-group" style="padding-top:30px">
+            <label class="pb-1 fw-bold">HEDİYE KUPONLARI</label> <br />
+            <select class="form-select-list" multiple id="selectedHediyeKuponlari" name="selectedHediyeKuponlari">
+                @foreach (Discount d in ViewBag.Discount as List<Discount>)
+                {
+                    if (d.discount_rate != 0)
+                    {
+                        <option value="@d.ID">@d.name</option>
+                    }
+
+                }
+                <!-- Diğer hediye kuponlarının option'ları -->
+            </select>
+        </div>
+
+        <div class="form-group form-check"></div>
+
+        <button type="submit" class="btn btn-success">Ekle</button>
+    </form>
+
+</div>
+
+
+
+@section scripts
+    {
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+    <script>
+        $("#hediyeForm").submit(function (event) {
+            event.preventDefault(); // Formun normal submitini engelle
+
+            var selectedMusteri = $("#selectedMusteri").val();
+            var selectedHediyeKuponlari = $("#selectedHediyeKuponlari").val();
+
+            $.ajax({
+                type: "POST",
+                url: "/Discount/DiscountTanimlaKullanici",
+                data: { customerIDList: selectedMusteri, discountIDList: selectedHediyeKuponlari },
+                success: function () {
+                    showModal("success", "Hediye kuponları başarıyla atanmıştır.");
+                },
+                error: function () {
+                    showModal("error", "Hediye kuponları atanırken bir hata oluştu.");
+                }
+            });
+        });
+        function showModal(type, message) {
+            var modal = $("#myModal");
+            var modalMessage = $("#modalMessage");
+
+            modalMessage.text(message);
+
+            if (type === "success") {
+                modal.addClass("modal-success");
+            } else if (type === "error") {
+                modal.addClass("modal-error");
+            }
+
+            modal.modal("show");
+
+            modal.on("hidden.bs.modal", function () {
+                modal.removeClass("modal-success modal-error");
+            });
+        }
+    </script>
+
+}
+

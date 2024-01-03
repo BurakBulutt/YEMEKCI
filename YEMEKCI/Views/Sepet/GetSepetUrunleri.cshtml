@@ -1,0 +1,233 @@
+﻿@using YEMEKCI.Models
+@model List<CartItem>
+
+@{
+    ViewBag.title = "Müşteri Sepet";
+}
+
+
+@section head
+    {
+
+    <script>
+        // calculatePrice fonksiyonunu güncelleyin
+        function calculatePrice(id, unitPrice, quantity) {
+            var result = unitPrice * quantity;
+            document.getElementById("resultCell-" + id).innerHTML = result;
+
+            // calculateTotalPrice fonksiyonunu çağırarak toplam fiyatı güncelleyin
+            calculateTotalPrice();
+        }
+
+        // Toplam fiyatı saklamak için bir değişken tanımlayın
+        var totalPrice = 0;
+
+        // Toplam fiyatı hesaplayan bir fonksiyon tanımlayın
+        function calculateTotalPrice() {
+            var total = 0;
+            var priceElements = document.querySelectorAll('[id^="resultCell-"]');
+
+            priceElements.forEach(function (element) {
+                var price = parseFloat(element.textContent);
+                if (!isNaN(price)) {
+                    total += price;
+                }
+            });
+
+            document.getElementById("displayedTotalPrice").textContent = total; // Toplam fiyatı gösteren alan
+            document.getElementById("hiddenTotalPrice").value = total; // Gizli alandaki toplam fiyat
+
+            // İkinci fonksiyonu çağırarak değeri ekranda gösterin
+            showTotalValue(total);
+        }
+
+        // Sayfa tamamen yüklendiğinde toplam fiyatı hesaplayın
+        document.addEventListener("DOMContentLoaded", function () {
+            calculateTotalPrice();
+        });
+    </script>
+
+}
+
+<div style="margin: 40px 50px 0px 50px;">
+
+    <h3 style="font-weight: 600; color:#f8a920; margin-bottom:20px">Sepet İçeriği</h3>
+
+
+    @section body{
+        <!-- Modal -->
+        <div class="modal fade" id="sepetiBosaltModal" tabindex="-1" role="dialog" aria-labelledby="sepetiBosaltModal" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="sepetiBosaltModal">CUSTOMER SIL</h5>
+                    </div>
+                    <div class="modal-body">
+                        <p class="mesaj"></p>
+                        <p class="hata"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+                        <button type="button" class="btn btn-dark sepetSil">Evet</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    @*<div>
+        @if (User.IsInRole("A"))
+        {
+            <a class="btn btn-dark" href="/Sepet/SepeteUrunEkle/@ViewBag.idcan">Sepete Ürün Ekle</a>
+        }
+        else
+        {
+            <a class="btn btn-dark" href="/AnaSayfa/Index">AnaSayfa Dön</a>
+        }
+        <a class="btn btn-danger sepetBosalt" data-toggle="modal" data-target="#sepetiBosaltModal" data-sptIDCAN="@ViewBag.idcan" href="#">Sepeti Boşalt</a>
+    </div>*@
+
+
+
+    <div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    @if (User.IsInRole("A"))
+                    {
+                        <th class="text-decoration-underline">SEPET ITEM</th>
+                        <th class="text-decoration-underline">SEPET ID</th>
+                        <th class="text-decoration-underline">SEPET KULLANICISI</th>
+                    }
+                    <th class="text-decoration-underline">YEMEK</th>
+                    <th class="text-decoration-underline">ADET</th>
+                    <th class="text-decoration-underline">FIYAT</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (CartItem c in Model)
+                {
+                    <tr>
+                        @if (User.IsInRole("A"))
+                        {
+                            <td>@c.ID</td>
+                            <td>@c.cartID</td>
+                            <td>@c.Cart.Customer.ID @c.Cart.Customer.name @c.Cart.Customer.surname</td>
+                        }
+                        <td>@c.Dish.name</td>
+                        <td>
+                            <div>
+                                <button class="decrement" style="border:none; margin-left:-10px" data-id="@c.ID">-</button>
+                                <span id="quantity-@c.ID" class="quantity-value">@c.quantity</span>
+                                <button class="increment" style="border:none" data-id="@c.ID">+</button>
+                            </div>
+                        </td>
+                        <td id="resultCell-@c.ID">
+                            @* Çarpma işlemini tetiklemek için bu satırı kullanın *@
+                            <script>
+                            calculatePrice(@c.ID, parseFloat(@c.Dish.unit_price), parseInt(@c.quantity));
+                            </script>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div style="display: flex; margin-top:40px; text-align:center">
+            <h4 class="label fw-semibold pe-2">Toplam Fiyat: </h4>
+            <h4 class="fw-bold" id="displayedTotalPrice">0</h4>
+            <h4 class="label fw-bold ps-1">₺</h4>
+
+            <form action="/Orderr/OrderrOlustur" method="get" id="orderForm">
+                <!-- İlk değeri için gizli bir alan -->
+                <input type="hidden" name="totalPrice" id="hiddenTotalPrice" value="0"> <!-- Bu değeri JavaScript ile güncelleyeceğiz -->
+                <!-- İkinci değeri için gizli bir alan -->
+                <input type="hidden" name="sepetId" value="@ViewBag.idcan"> <!-- your_value_here, ikinci değeri buraya eklemelisiniz -->
+                <!-- Sipariş oluşturma butonu -->
+                <button class="btn btn-dark ms-5" style="margin-top:-5px" type="submit">Sipariş Oluştur</button>
+            </form>
+
+        </div>
+    </div>
+
+    <!-- Gizli form -->
+    <form id="updateForm" method="post" action="/Sepet/SepetiGuncelle">
+        <input type="hidden" name="cartItemId" id="cartItemId" value="" />
+        <input type="hidden" name="newQuantity" id="newQuantity" value="" />
+    </form>
+</div>
+
+@section scripts
+    {
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+    <script>
+        // Sayfa yüklendikten sonra butonlara tıklama olay dinleyicilerini ekleyelim
+        document.addEventListener("DOMContentLoaded", function () {
+            // Artı butonlarına tıklama olay dinleyicisi
+            document.querySelectorAll(".increment").forEach(function (button) {
+                button.addEventListener("click", function () {
+                    var cartItemId = this.getAttribute("data-id");
+                    var quantityElement = document.getElementById(`quantity-${cartItemId}`);
+                    var quantityValue = parseInt(quantityElement.textContent, 10);
+                    updateQuantityInController(cartItemId, quantityValue + 1); // Quantity'i arttıralım (örneğin 1)
+                });
+            });
+
+            // Eksi butonlarına tıklama olay dinleyicisi
+            document.querySelectorAll(".decrement").forEach(function (button) {
+                button.addEventListener("click", function () {
+                    var cartItemId = this.getAttribute("data-id");
+                    var quantityElement = document.getElementById(`quantity-${cartItemId}`);
+                    var quantityValue = parseInt(quantityElement.textContent, 10);
+                    updateQuantityInController(cartItemId, quantityValue - 1); // Quantity'i azaltalım (örneğin -1)
+                });
+            });
+        });
+
+        // Quantity'i controller metoduna gönderen fonksiyon
+        function updateQuantityInController(cartItemId, newQuantity) {
+            document.getElementById('cartItemId').value = cartItemId;
+            document.getElementById('newQuantity').value = newQuantity;
+            document.getElementById('updateForm').submit();
+        }
+
+    </script>
+
+    <script>
+        $(".sepetBosalt").click(
+            function () {
+                $(".modal-body>p.hata").html = "";
+                $(".modal-body>p.mesaj").html("Sepetteki Ürünler Silinsin mi?");
+                var sepetID = $(this).attr("data-sptIDCAN");
+                $(".sepetSil").data("sepetID",sepetID);
+            }
+        );
+
+        $(".sepetSil").click(
+            function () {
+                var id = $(this).data("sepetID");
+
+                $.ajax(
+                    {
+                        type: "POST",
+                        url: "/Sepet/SepetiBosalt/" + id,
+                        success: function (param) {
+                            if (param == 1) {
+                                window.location.replace("/Sepet/GetSepetUrunleri/@ViewBag.cusID");
+                            }
+                            else {
+                                $(".modal-body>p.hata").html("Hata !!!");
+                            }
+                        }
+                    }
+                );
+            }
+        );
+    </script>
+
+}
+
+
+

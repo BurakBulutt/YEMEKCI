@@ -1,0 +1,42 @@
+﻿@using YEMEKCI.Models
+@model List<Orderr>
+
+@{
+    ViewBag.Title = "Siparis Getir Musteri";
+    Layout = "~/Views/Shared/_LayoutWeb.cshtml";
+}
+
+<div style="margin: 40px 50px 0px 50px;">
+    <h3  style="font-weight: 600; color:#f8a920; margin-bottom:20px">Siparislerim</h3>
+
+    <div>
+        <table class="table text-capitalize">
+            <thead>
+                <tr class="text-decoration-underline">
+                    <th>SİPARIS NO</th>
+                    <th>TESLIMAT ADRESI</th>
+                    <th>ÖDEME YÖNTEMİ</th>
+                    <th>SİPARİŞ TARIHI</th>
+                    <th>TOPLAM TUTAR</th>
+                    <th>SİPARİS DURUMU</th>
+                    <th>Sipariş İçeriğini Görüntüle</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Orderr o in Model)
+                {
+                    <tr>
+                        <td>@o.ID</td>
+                        <td>@o.Address.address1</td>
+                        <td>@o.Payment.name</td>
+                        <td>@o.order_date</td>
+                        <td>@o.total_Amaount</td>
+                        <td>@o.order_status</td>
+                        <td><a class="btn btn-dark" href="/Orderr/FisOlustur/@o.ID">Sipariş İçeriğini Görüntüle</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>

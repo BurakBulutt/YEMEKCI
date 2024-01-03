@@ -1,0 +1,276 @@
+﻿@using System.Security.Claims
+@using YEMEKCI.Models
+@using YEMEKCI.Security
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>@ViewBag.Title</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="~/Admin_Contents/assets/img/favicon.ico" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+    <link href="~/Admin_Contents/css/styles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3..1/dist/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- Bootstrap JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+
+    @RenderSection("head", false)
+</head>
+<body style="font-family:'Poppins', sans-serif; padding-top:70px">
+    <div class="shadow-lg fixed-top bg-light">
+        <nav class="sb-topnav navbar navbar-expand" style="margin:0px 90px 0px 90px; padding:35px 0px 35px 0px;">
+            <!-- Navbar Brand-->
+            
+            <div class="d-flex align-items-center gap-2">
+                <img src="~/Admin_Contents/assets/img/food.png" style="height:51px; width:63px" />
+                <a style="font-family: 'Lobster', sans-serif; background: -webkit-linear-gradient(#e66465, #9198e5); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 600; font-size: 31px; " href="/AnaSayfa/Index">YEMEK-CÜ</a>
+            </div>
+            <!-- Sidebar Toggle-->
+            @*<button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>*@
+            <!-- Temel Butonlar-->
+            <div class="navbar-nav ms-auto">
+
+                @if (!HttpContext.Current.User.Identity.IsAuthenticated)
+                {
+                    <a class="btn btn-dark me-3 rounded-3 fw-semibold" href="/Guvenlik/Login">Giriş Yap</a>
+                    <a class="btn btn-dark rounded-3 fw-semibold" href="/Guvenlik/Register">Kayıt Ol</a>
+                }
+            </div>
+
+
+            @if (HttpContext.Current.User.Identity.IsAuthenticated)
+            {
+                var authTicket = ((FormsIdentity)HttpContext.Current.User.Identity).Ticket;
+                string[] userData = authTicket.UserData.Split('|'); // Kullanıcıya özgü verileri ayrıştır
+                int userID = int.Parse(userData[2]);
+
+                @*<div class="sb-sidenav-footer mx-2">
+                    <div class="small">Aktif Kullanıcı:</div>
+                    </div>*@
+
+                <div class="position-relative">
+                    <button style="font-weight:500" class="border-0 rounded-3 px-3 py-1 me-3 border-bottom shadow-sm" type="button" id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i style="padding-right: 7px;" class="fa-regular fa-user"></i>@userData[0] @userData[1] <i class="fas fa-caret-down"></i>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="userMenu">
+                        <li>
+                            <form action="/Customer/CustomerProfile/@userID" method="get">
+                                <button style="font-weight:500; width:185px; margin-bottom:5px" class="dropdown-item" type="submit">Profilim  <i style="padding-left: 5px" class="fa-regular fa-user"></i></button>
+                            </form>
+                        </li>
+                        <li>
+                            <form action="/Orderr/SiparisGetirMusteri/@userID" method="get">
+                                <button style="font-weight:500; width:185px; margin-bottom:5px" class="dropdown-item" type="submit">Siparişlerim <i style="padding-left: 5px" class="fa-solid fa-list-check"></i></button>
+                            </form>
+                        </li>
+                        <li>
+                            <form action="/Sepet/GetSepetUrunleri/@userID" method="get">
+                                <button style="font-weight:500" class="dropdown-item" type="submit">Sepetim <i style="padding-left: 5px" class="fa-solid fa-basket-shopping"></i></button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+
+                <form action="/Guvenlik/LogOut" method="get" class="text-center">
+                    <button style="font-weight:500" class="border-0 rounded-3 px-3 py-1 text-bg-danger text-light border-bottom shadow-sm" type="submit">Çıkış Yap</button>
+                </form>
+            }
+        </nav>
+    </div>
+
+    <div id="layoutSidenav">
+        @if (HttpContext.Current.User.Identity.IsAuthenticated)
+        {
+            var authTicket = ((FormsIdentity)HttpContext.Current.User.Identity).Ticket;
+            string[] userData = authTicket.UserData.Split('|'); // Kullanıcıya özgü verileri ayrıştır
+            int userID = int.Parse(userData[2]);
+            YemekciEntities model = new YemekciEntities();
+            Address[] addresses = model.Address.Where(x => x.customerID == userID).ToArray();
+            Category[] categories = model.Category.ToArray();
+         
+            <div>
+                <nav class="shadow-lg pt-4 h-100" style="position:relative; z-index:1; display:flex; flex-direction:column;">
+                    <div>
+                        <div class="px-2">
+
+                            <div>
+                                <!--UYANINCA RESTORAN GETIRME METODUNU YAZ-->
+                                <form action="/Restaurant/RestaurantGetir" method="get">
+                                    <div class="form-group">
+                                        <label style="font-weight:500;" for="adreslbl" class="form-label">Adresinizi Seçiniz;</label>
+                                        <select class="form-select mb-4" style="width: 183px; margin-left: 3px; cursor: pointer" id="adreslbl" name="adresID">
+                                            @foreach (Address ad in addresses)
+                                            {
+                                                <option value="@ad.ID">@ad.address1 @ad.city/@ad.district</option>
+                                            }
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label style="font-weight:500;" for="categorilbl" class="form-label">Kategori Seçiniz;</label>
+                                        <select class="form-select" style="width: 183px; margin-left:3px; cursor:pointer" id="categorilbl" name="categoryId">
+                                            @foreach (Category c in categories)
+                                            {
+                                                <option value="@c.ID">@c.name</option>
+                                            }
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group form-check"></div>
+
+                                    <div>
+                                        <button type="submit" class="btn" style="width: 160px; background-color:darkslategrey; color:white; font-weight:600; margin-top:-10px; margin-left:13px ">Restoranları Ara</button>
+                                    </div>
+                                </form>
+                            </div>
+
+                            @if (User.IsInRole("A"))
+                            {
+                                <div style="margin: 65px auto 15px auto; width:90%; border-top:2px solid; border-top-color:darkgray; "></div>
+                                <h6 style="font-weight: 600; margin-left:4px"> - Administor - </h6>
+                                <a class="nav-link collapsed d-flex gap-2 ms-1" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                                    Veri Tabanı
+                                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                </a>
+                            }
+
+                            <div style="overflow:auto; max-height:210px" class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav" style="display:flex; flex-direction: column; ">
+                                    @if (User.IsInRole("A"))
+                                    {
+                                        <a class="nav-link d-flex" href="/Customer/Index">
+                                            <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                                            Müşteriler
+                                        </a>
+                                        <a class="nav-link d-flex" href="/Category/Index">
+                                            <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                                            Kategoriler
+                                        </a>
+                                        <a class="nav-link d-flex" href="/Restaurant/Index">
+                                            <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                                            Restoranlar
+                                        </a>
+                                        <a class="nav-link d-flex" href="/Address/Index">
+                                            <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                                            Adresler
+                                        </a>
+                                        <a class="nav-link d-flex" href="/Sepet/Index">
+                                            <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                                            Sepet
+                                        </a>
+                                        <a class="nav-link d-flex" href="/Dish/Index">
+                                            <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                                            Yemek
+                                        </a>
+                                        <a class="nav-link d-flex" href="/Discount/Index">
+                                            <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                                            Hediye Kuponları
+                                        </a>
+                                        <a class="nav-link d-flex" href="/Payment/Index">
+                                            <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                                            Payments
+                                        </a>
+                                        <a class="nav-link d-flex" href="/Orderr/Index">
+                                            <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                                            Siparişler
+                                        </a>
+                                    }
+                                    @if (User.IsInRole("R") || User.IsInRole("A"))
+                                    {
+                                        <a class="nav-link d-flex" href="/Orderr/RestoranSiparisleriGiris">
+                                            <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                                            Restoran Siparişleri
+                                        </a>
+                                    }
+                                </nav>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+
+                    @*<form action="/Customer/CustomerProfile/@userID" method="get" class="text-center">
+                            <button type="submit" class="btn btn-primary my-2" style="width: 200px;">Profil</button>
+                        </form>
+                        <form action="/Orderr/SiparisGetirMusteri/@userID" method="get" class="text-center">
+                            <button type="submit" class="btn btn-warning mb-2" style="width: 200px;">Siparişler</button>
+                        </form>
+                        <form action="/Sepet/GetSepetUrunleri/@userID" method="get" class="text-center">
+                            <button type="submit" class="btn btn-light mb-2" style="width: 200px;">Sepet</button>
+                        </form>
+                        <form action="/Guvenlik/LogOut" method="get" class="text-center">
+                            <button type="submit" class="btn btn-danger mb-2" style="width: 200px;">Çıkış Yap</button>
+                        </form>*@
+                </nav>
+            </div>
+        }
+
+        <div id="layoutSidenav_content">
+            <main>
+                <!-- Page content-->
+                <div>
+                    @RenderBody()
+                </div>
+            </main>
+
+
+
+        </div>
+    </div>
+
+    @*<footer style="bottom: 0px; width: 100%; background-color: #111827" class="py-4">
+            <div class="d-flex justify-content-between" style="margin:0px 90px 0px 90px">
+                <p class="text-light text-center">Copyright &copy; Your Website 2023</p>
+
+            </div>
+        </footer>*@
+
+    <footer style="bottom: 0px; width: 100%; background-color: #111827;">
+        <div class="d-flex text-light justify-content-between" style="margin:0px 90px 0px 90px; padding:5px 0px 5px 0px">
+
+            <p style="font-size:15px; font-weight:600" class="pt-3">Copyright © 2023 YEMEK-CÜ</p>
+
+            <div class="d-flex pt-3 gap-4" style="font-size:17px; font-weight:600">
+                <a href="#"><i class="fa-brands fa-instagram text-light"></i></a>
+                <a href="#"><i class="fa-brands fa-twitter text-light"></i></a>
+                <a href="#"><i class="fa-brands fa-facebook text-light"></i></a>
+            </div>
+
+        </div>
+    </footer>
+
+
+
+    @RenderSection("body", false)
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="~/Admin_Contents/js/scripts.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+    @RenderSection("scripts", false)
+</body>
+</html>

@@ -1,0 +1,106 @@
+﻿@using YEMEKCI.Models
+@model List<Restaurant>
+
+@{
+    ViewBag.Title = "Restoranlar";
+
+}
+
+<div style="margin: 40px 50px 0px 50px;">
+
+    <h3 style="font-weight: 600; color:#f8a920; margin-bottom:20px">Restoranlar</h3>
+
+    <a class="btn btn-dark mb-4 mt-1" href="/Restaurant/RestaurantEkle">Restaurant Ekle</a>
+
+    @section head{
+        <style>
+            .hata {
+                color: red;
+            }
+        </style>
+    }
+
+    @section body{
+        <!-- Modal -->
+        <div class="modal fade" id="restaurantSilModal" tabindex="-1" role="dialog" aria-labelledby="restaurantSilModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="restaurantSilModalLabel">RESTAURANT SIL</h5>
+                    </div>
+                    <div class="modal-body">
+                        <p class="mesaj"></p>
+                        <p class="hata"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+                        <button type="button" class="btn btn-dark restaurantSil">Evet</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <table class="table table-striped">
+        <thead>
+            <tr class="text-decoration-underline">
+                <th>RESTAURANT ID</th>
+                <th>RESTAURANT ISMI</th>
+                <th>ADRES</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Restaurant r in Model)
+            {
+                <tr>
+                    <td>@r.ID</td>
+                    <td>@r.name</td>
+                    <td>@r.Restaurant_Address.address   @r.Restaurant_Address.city/@r.Restaurant_Address.district</td>
+                    <td><a href="#" data-toggle="modal" data-target="#restaurantSilModal" data-rstID="@r.ID" data-rstAdi="@r.name" class="btn btn-danger rstSil">Sil</a></td>
+                    <td><a class="btn btn-dark" href="/Restaurant/RestaurantGuncelle/@r.ID">Güncelle</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+@section scripts{
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+    <script>
+        $(".rstSil").click(
+            function () {
+                $(".modal-body>p.hata").html = "";
+                var restaurantName = $(this).attr("data-rstAdi");
+                $(".modal-body>p.mesaj").html(restaurantName + " silinsin mi?");
+                var restaurantID = $(this).attr("data-rstID");
+                $(".restaurantSil").data("restaurantID", restaurantID);
+            }
+        );
+
+        $(".restaurantSil").click(
+            function () {
+                var id = $(this).data("restaurantID");
+
+                $.ajax(
+                    {
+                        type: "POST",
+                        url: "/Restaurant/RestaurantSil/" + id,
+                        success: function (param) {
+                            if (param == 1) {
+                                window.location.replace("/Restaurant/Index");
+                            }
+                            else {
+                                $(".modal-body>p.hata").html("Hata !!!");
+                            }
+                        }
+                    }
+                );
+            }
+        );
+    </script>
+
+}
+

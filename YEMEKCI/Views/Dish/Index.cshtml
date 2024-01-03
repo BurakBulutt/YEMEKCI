@@ -1,0 +1,119 @@
+﻿@using YEMEKCI.Models
+@model List<Dish>
+
+@{
+    ViewBag.title = "YEMEKLER";
+}
+
+
+<div style="margin: 40px 50px 0px 50px;">
+
+    <h3 style="font-weight: 600; color:#f8a920; margin-bottom:20px">Yemekler</h3>
+
+    <div>
+        <a class="btn btn-success mt-1 mb-4" href="/Dish/YemekEkle">Yemek Ekle</a>
+    </div>
+
+
+    @section head{
+        <style>
+            .hata {
+                color: red;
+            }
+        </style>
+    }
+
+
+    @section body{
+        <!-- Modal -->
+        <div class="modal fade" id="yemekSilModal" tabindex="-1" role="dialog" aria-labelledby="yemekSilModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="yemekSilModalLabel">CUSTOMER SIL</h5>
+                    </div>
+                    <div class="modal-body">
+                        <p class="mesaj"></p>
+                        <p class="hata"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+                        <button type="button" class="btn btn-dark yemekSil">Evet</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    <div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>YEMEK ID</th>
+                    <th>RESTORAN</th>
+                    <th>KATEGORI</th>
+                    <th>YEMEK ADI</th>
+                    <th>BIRIM FIYATI</th>
+                    <th>Sil</th>
+                    <th>Güncelle</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Dish d in Model)
+                {
+                    <tr>
+                        <td>@d.ID</td>
+                        <td>@d.restaurantID @d.Restaurant.name</td>
+                        <td>@d.Category.name</td>
+                        <td>@d.name</td>
+                        <td>@d.unit_price</td>
+                        <td><a href="#" data-toggle="modal" data-target="#yemekSilModal" data-dID="@d.ID" data-dAdi="@d.name" class="btn btn-danger dSil">Sil</a></td>
+                        <td><a class="btn btn-dark" href="/Dish/YemekGuncelle/@d.ID">Güncelle</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+@section scripts{
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+    <script>
+        $(".dSil").click(
+            function () {
+                $(".modal-body>p.hata").html = "";
+                var dishName = $(this).attr("data-dAdi");
+                $(".modal-body>p.mesaj").html(dishName + " silinsin mi?");
+                var dID = $(this).attr("data-dID");
+                $(".yemekSil").data("yemekID", dID);
+            }
+        );
+
+        $(".yemekSil").click(
+            function () {
+                var id = $(this).data("yemekID");
+
+                $.ajax(
+                    {
+                        type: "POST",
+                        url: "/Dish/DishSil/" + id,
+                        success: function (param) {
+                            if (param == 1) {
+                                window.location.replace("/Dish/Index");
+                            }
+                            else {
+                                $(".modal-body>p.hata").html("Hata !!!");
+                            }
+                        }
+                    }
+                );
+            }
+        );
+    </script>
+
+}
+
+

@@ -1,0 +1,96 @@
+﻿@using YEMEKCI.Models
+@model Customer
+
+
+@{
+    ViewBag.Title = "Müşteri Ekle";
+}
+
+<div style="margin: 40px 50px 0px 50px;">
+
+    <h3 style="font-weight: 600; color:#f8a920; margin-bottom:20px">Müşteri Ekle</h3>
+
+
+    <div>
+        <form>
+            <div style="display:flex; gap:0px 30px;">
+                <div class="form-group">
+                    <label class="pb-1 fw-bold" for="name">Ad:</label>
+                    <input type="text" class="form-control py-2" id="name" name="name" style="outline:none;" value="@Model.name">
+                </div>
+                <div class="form-group">
+                    <label class="pb-1 fw-bold" for="surname">Soyad:</label>
+                    <input type="text" class="form-control py-2" id="surname" name="surname" value="@Model.surname">
+                </div>
+            </div>
+
+            <div style="display:flex; gap:0px 30px; padding-top:30px">
+                <div class="form-group">
+                    <label class="fw-bold pb-1" for="email">E-Mail:</label>
+                    <input style="width:300px" type="text" class="form-control py-2" id="email" name="email" value="@Model.email">
+                </div>
+                <div class="form-group ">
+                    <label class="pb-1 fw-bold" for="birthdate">Doğum Tarihi:</label>
+                    <input type="text" class="form-control py-2" id="birthdate" name="birthdate" value="@Model.birthdate">
+                </div>
+
+            </div>
+
+            <div style="display:flex; gap:0px 30px; padding-top:30px">
+                <div class="form-group">
+                    <label class="fw-bold pb-1" for="password">Şifre:</label>
+                    <input type="text" class="form-control py-2" id="password" name="password" value="@Model.password">
+                </div>
+
+                <div class="form-group">
+                    <label class="fw-bold pb-1" for="password">Rol:</label>
+                    <input type="text" class="form-control py-2" id="rolName" name="rolName" value="@Model.rolName">
+                </div>
+            </div>
+
+            <div class="form-group form-check"></div>
+
+            <button type="submit" class="btn btn-success px-4 mt-3">Ekle</button>
+
+        </form>
+    </div>
+
+
+    @*<form action="/Customer/CustomerEkle" method="post">
+
+        <div class="form-group">
+            <label for="name">İSİM :</label>
+            <input type="text" class="form-control" value="@Model.name " id="name" name="name">
+        </div>
+
+        <div class="form-group">
+            <label for="surname">SOY ISIM:</label>
+            <input type="text" class="form-control" value="@Model.surname " id="surname" name="surname">
+        </div>
+
+        <div class="form-group">
+            <label for="birthdate">DOĞUM TARIHI:</label>
+            <input type="date" class="form-control" value="@Model.birthdate " id="birthdate" name="birthdate">
+        </div>
+
+        <div class="form-group">
+            <label for="email">E-MAIL:</label>
+            <input type="text" class="form-control" value="@Model.email " id="email" name="email">
+        </div>
+
+        <div class="form-group">
+            <label for="password">SIFRE :</label>
+            <input type="text" class="form-control" value="@Model.password " id="password" name="password">
+        </div>
+
+        <div class="form-group">
+            <label for="password">ROL :</label>
+            <input type="text" class="form-control" value="@Model.rolName " id="rolName" name="rolName">
+        </div>
+
+        <div class="form-group form-check">
+        </div>
+
+    </form>*@
+</div>
+

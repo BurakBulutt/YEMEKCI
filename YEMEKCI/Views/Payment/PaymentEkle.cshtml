@@ -1,0 +1,26 @@
+﻿@using YEMEKCI.Models
+@model Payment
+@{
+    ViewBag.Title = "Ödeme Yöntemi Ekle";
+    Layout = "~/Views/Shared/_LayoutWeb.cshtml";
+}
+
+<div style="margin: 40px 50px 0px 50px;">
+
+    <h3 style="font-weight: 600; color:#f8a920; margin-bottom:20px">Ödeme Yöntemi Ekle</h3>
+
+    <form action="/Payment/PaymentEkle" method="post">
+
+        <div class="form-group">
+            <label  class="pb-1 fw-bold" for="name">İsim :</label>
+            <input type="text" class="form-control w-25" value="@Model.name " id="name" name="name">
+        </div>
+
+        <div class="form-group form-check">
+        </div>
+        <button type="submit" class="btn btn-success">Ekle</button>
+
+    </form>
+
+
+</div>

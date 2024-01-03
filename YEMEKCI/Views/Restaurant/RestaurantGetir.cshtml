@@ -1,0 +1,39 @@
+﻿@using YEMEKCI.Models
+@model List<Restaurant>
+
+@{
+    ViewBag.Title = "Restoran Getir";
+    Layout = "~/Views/Shared/_LayoutWeb.cshtml";
+}
+
+
+<div style="margin: 40px 50px 0px 50px;">
+
+    <h3 style="font-weight: 600; color:#f8a920; margin-bottom:20px">Restoranlar </h3>
+
+    <div style="display:flex; gap:40px;">
+
+        @if (Model.Count == 0)
+        {
+            <p> RESTORAN BULUNAMADI !</p>
+        }
+        else
+        {
+            foreach (Restaurant r in Model)
+            {
+
+                <div class="shadow rounded-3">
+                    <img style="width:350px; height:200px; padding:20px 35px 20px 35px; border-radius:38px" src="~/Admin_Contents/assets/img/restoran.jpg">
+                    <div>
+                        <div class="text-center my-3">
+                            <h5 class="fw-bolder">@r.name</h5>
+                            @r.Restaurant_Address.address
+                        </div>
+                    </div>
+                    <div class="text-center"><a class="btn btn-dark px-4 mb-4 mt-2" href="/Restaurant/RestaurantYemekleri/@r.ID">Restorana Git</a></div>
+                </div>
+            }
+        }
+    </div>
+
+</div>

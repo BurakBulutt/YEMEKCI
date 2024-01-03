@@ -1,0 +1,32 @@
+﻿@using YEMEKCI.Models
+@model Orderr
+@{
+    ViewBag.Title = "Restoran Siparis Durumu Guncelle";
+    Layout = "~/Views/Shared/_LayoutWeb.cshtml";
+}
+
+<div style="margin: 40px 50px 0px 50px;">
+
+    <h3 style="font-weight: 600; color:#f8a920; margin-bottom:20px">Siparis Durumu Guncelle</h3>
+
+    <form asp-action="/Orderr/RestoranSiparisDurumuGuncelle" asp-route-id="@Model.ID" method="post">
+
+        <div class="form-group">
+            <label style="font-size: 18px; font-weight: 600; margin-right:6px">Sipariş Durumu</label>
+            <select class="form-select-list" id="order_status" name="order_status">
+                @for (int index = 0; index < ViewBag.SiparisDurumlari.Count; index++)
+                {
+                    string siparisDurumu = ViewBag.SiparisDurumlari[index];
+                    <option value="@siparisDurumu">@siparisDurumu</option>
+                }
+            </select>
+        </div>
+
+        <div class="form-group form-check"></div>
+
+        <button type="submit" class="btn btn-dark">Güncelle</button>
+
+    </form>
+
+
+</div>

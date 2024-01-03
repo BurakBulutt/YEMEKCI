@@ -1,0 +1,51 @@
+﻿@using YEMEKCI.Models
+@model Address
+@{
+    ViewBag.Title = "Müşteri Adres Ekle";
+    Layout = "~/Views/Shared/_LayoutWeb.cshtml";
+}
+
+
+<div style="width:70%; margin:40px 0px 0px 50px;">
+
+    <h3 style="font-weight: 600; color:#f8a920; margin-bottom:20px">Adres Ekle</h3>
+
+    <form action="/Address/AddressEkleCustomer" method="post">
+
+        <div class="form-group">
+            <input type="hidden" class="form-control" value="@Model.ID" id="ID" name="ID">
+        </div>
+
+        <div style="display:flex; gap:0px 30px;">
+            <div class="form-group">
+                <label class="pb-1 fw-bold" for="name">Şehir :</label>
+                <input type="text" class="form-control py-2" value="@Model.city " id="city" name="city">
+            </div>
+
+            <div class="form-group">
+                <label class="pb-1 fw-bold" for="name">İlçe :</label>
+                <input type="text" class="form-control py-2" value="@Model.district " id="district" name="district">
+            </div>
+        </div>
+
+        <div class="form-group" style="padding-top:30px">
+            <label class="pb-1 fw-bold" for="name">Posta Kodu :</label>
+            <input type="text" class="form-control w-25" value="@Model.postalCode " id="postalCode" name="postalCode">
+        </div>
+
+        <div class="form-group" style="padding-top:30px">
+            <label class="pb-1 fw-bold" for="name">Açık Adres :</label>
+            <input type="text" class="form-control w-50" value="@Model.address1 " id="address1" name="address1">
+        </div>
+
+        <div class="form-group">
+            <input type="hidden" class="form-control" value="@Model.customerID" id="customerID" name="customerID">
+        </div>
+
+        <div class="form-group form-check"></div>
+
+        <button type="submit" class="btn btn-success">Ekle</button>
+
+    </form>
+</div>
+

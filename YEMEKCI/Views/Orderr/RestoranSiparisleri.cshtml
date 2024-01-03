@@ -1,0 +1,113 @@
+﻿@using YEMEKCI.Models
+@model List<Orderr>
+@{
+    ViewBag.Title = "Restoran Siparisleri";
+    Layout = "~/Views/Shared/_LayoutWeb.cshtml";
+}
+
+
+<div style="margin: 40px 50px 0px 50px;">
+
+    <h3 style="font-weight: 600; color:#f8a920; margin-bottom:20px">Restoran Siparişleri</h3>
+
+    @section body{
+        <!-- Modal -->
+        <div class="modal fade" id="siparisSilModal" tabindex="-1" role="dialog" aria-labelledby="siparisSilModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="siparisSilModal">SIPARIS SIL</h5>
+                    </div>
+                    <div class="modal-body">
+                        <p class="mesaj"></p>
+                        <p class="hata"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+                        <button type="button" class="btn btn-dark siparisSil">Evet</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    }
+
+    <div>
+        <table class="table table-striped">
+            <thead>
+                <tr class="text-decoration-underline">
+                    <th>ID</th>
+                    <th>MÜŞTERİ</th>
+                    <th>TESLIMAT ADRESI</th>
+                    <th>ÖDEME YÖNTEMİ</th>
+                    <th>SİPARİŞ TARIHI</th>
+                    <th>TOPLAM TUTAR</th>
+                    <th>SİPARİŞ DURUMU</th>
+                    <th>Sil</th>
+                    <th>Sipariş İçeriğini Görüntüle</th>
+                    <th>Sipariş Durumunu Güncelle</th>
+                    <th>Fiş Oluştur</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Orderr o in Model)
+                {
+                    <tr>
+                        <td>@o.ID</td>
+                        <td>@o.Customer.name @o.Customer.surname</td>
+                        <td>@o.Address.address1</td>
+                        <td>@o.Payment.name</td>
+                        <td>@o.order_date</td>
+                        <td>@o.total_Amaount</td>
+                        <td>@o.order_status</td>
+                        <td><a href="#" data-toggle="modal" data-target="#siparisSilModal" data-sprsID="@o.ID" class="btn btn-danger sprsSil">Sil</a></td>
+                        <td><a class="btn btn-dark" href="/Orderr/OrderrItemGetir/@o.ID">Sipariş İçeriğini Görüntüle</a></td>
+                        <td><a class="btn btn-dark" href="/Orderr/RestoranSiparisDurumuGuncelle/@o.ID">Sipariş Durumunu Güncelle</a></td>
+                        <td><a class="btn btn-dark" href="/Orderr/FisOlustur/@o.ID">Fiş Oluştur</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+@section scripts{
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+    <script>
+        $(".sprsSil").click(
+            function () {
+                $(".modal-body>p.hata").html = "";
+                var siparisID = $(this).attr("data-sprsID");
+                $(".modal-body>p.mesaj").html(siparisID + " no'lu sipariş silinsin mi ? !!(Bu Siparis Numarasina ait Tüm Kayıtlar Silinecektir)");
+                $(".siparisSil").data("siparisID", siparisID);
+            }
+        );
+
+        $(".siparisSil").click(
+            function () {
+                var id = $(this).data("siparisID");
+
+                $.ajax(
+                    {
+                        type: "POST",
+                        url: "/Orderr/OrderrSil/" + id,
+                        success: function (param) {
+                            if (param == 1) {
+                                window.location.replace("/Orderr/Index");
+                            }
+                            else {
+                                $(".modal-body>p.hata").html("Siparis Silinirken Hata Meydana Geldi");
+                            }
+                        }
+                    }
+                );
+            }
+        );
+    </script>
+
+}
+
+

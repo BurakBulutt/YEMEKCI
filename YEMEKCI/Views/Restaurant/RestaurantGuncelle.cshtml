@@ -1,0 +1,57 @@
+﻿@using YEMEKCI.Models
+@model YEMEKCI.ViewModels.RestaurantEkleViewModel
+@{
+    ViewBag.Title = "Restoran Güncelle";
+ 
+}
+
+<div style="margin: 40px 50px 0px 50px;">
+
+    <h3 style="font-weight: 600; color:#f8a920; margin-bottom:20px">Restoran Güncelle</h3>
+
+    <form asp-action="/Restaurant/RestaurantGuncelle" asp-route-id="@Model.restaurant.ID" method="post">
+
+        <div class="form-group">
+            <input type="hidden" class="form-control" id="restaurant.ID" name="restaurant.ID" value="@Model.restaurant.ID">
+        </div>
+
+        <div class="form-group" style="padding-bottom:30px">
+            <label class="pb-1 fw-bold"  for="name">İsim:</label>
+            <input type="text" class="form-control w-25" id="restaurant.name" name="restaurant.name" value="@Model.restaurant.name">
+        </div>
+
+        <div class="form-group">
+            <input type="hidden" class="form-control" id="restaurant.restaurant_address_id" name="restaurant.restaurant_address_id" value="@Model.restaurant.restaurant_address_id">
+        </div>
+
+        <!--Restourant_Address-->
+        <div class="form-group">
+            <input type="hidden" class="form-control" value="@Model.Raddress.ID" id="Raddress.ID" name="Raddress.ID">
+        </div>
+
+        <div class="form-group" style="padding-bottom:30px">
+            <label class="pb-1 fw-bold"  for="name">ŞEHİR :</label>
+            <input type="text" class="form-control w-25" value="@Model.Raddress.city" id="Raddress.city" name="Raddress.city">
+        </div>
+
+        <div class="form-group"  style="padding-bottom:30px">
+            <label class="pb-1 fw-bold"  for="district">İLÇE :</label>
+            <input type="text" class="form-control w-25" value="@Model.Raddress.district" id="Raddress.district" name="Raddress.district">
+        </div>
+
+        <div class="form-group" style="padding-bottom:30px">
+            <label class="pb-1 fw-bold"  for="postalCode">POSTA KODU :</label>
+            <input type="int" class="form-control w-25" value="@Model.Raddress.postalCode" id="Raddress.postalCode" name="Raddress.postalCode">
+        </div>
+
+        <div class="form-group">
+            <label class="pb-1 fw-bold"  for="address">ADRES :</label>
+            <input type="text" class="form-control w-50" value="@Model.Raddress.address" id="Raddress.address" name="Raddress.address">
+        </div>
+
+        <div class="form-group form-check"> </div>
+        <button type="submit" class="btn btn-success">Güncelle</button>
+
+    </form>
+
+</div>

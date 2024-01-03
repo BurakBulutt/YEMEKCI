@@ -1,0 +1,59 @@
+﻿@using YEMEKCI.Models
+@model Customer
+
+@{
+    ViewBag.Title = "CustomerProfile";
+    Layout = "~/Views/Shared/_LayoutWeb.cshtml";
+}
+
+
+
+
+
+<div style="width:70%; margin:40px 0px 0px 50px;">
+
+    <h3 style="font-weight: 600; color:#f8a920; margin-bottom:20px">Üyelik Bilgilerim</h3>
+
+    <div>
+        <form>
+            <div style="display:flex; gap:0px 30px;">
+                <div class="form-group">
+                    <label class="pb-1 fw-bold" for="name">Ad:</label>
+                    <input type="text" class="form-control py-2" id="name" name="name" style="outline:none;" value="@Model.name" readonly>
+                </div>
+                <div class="form-group">
+                    <label class="pb-1 fw-bold" for="surname">Soyad:</label>
+                    <input type="text" class="form-control py-2" id="surname" name="surname" value="@Model.surname" readonly>
+                </div>
+            </div>
+
+            <div style="display:flex; gap:0px 30px; padding-top:30px">
+                <div class="form-group">
+                    <label class="fw-bold pb-1" for="email">E-Mail:</label>
+                    <input style="width:300px" type="text" class="form-control py-2" id="email" name="email" value="@Model.email" readonly>
+                </div>
+                <div class="form-group ">
+                    <label class="pb-1 fw-bold" for="birthdate">Doğum Tarihi:</label>
+                    <input type="text" class="form-control py-2" id="birthdate" name="birthdate" value="@Model.birthdate" readonly>
+                </div>
+
+            </div>
+
+            <div class="form-group" style="padding-top:30px">
+                <label class="fw-bold pb-1" for="password">Şifre:</label>
+                <div class="d-flex">
+                    <input type="text" class="form-control py-2 w-25" id="password" name="password" value="@Model.password" readonly>
+                    <a class="btn ms-3 align-self-center py-2" style="font-size: 15px; background-color: darkslategrey; color: white;" href="/Customer/CustomerSifreDegistir/@Model.ID">Şifre Değiştir</a>
+                </div>
+            </div>
+
+            <div class="form-group form-check"></div>
+        </form>
+    </div>
+
+    <div class="pt-4">
+        <a class="btn btn-dark" href="/Address/AddressGetir/@Model.ID">Adreslerim</a>
+    </div>
+</div>
+
+

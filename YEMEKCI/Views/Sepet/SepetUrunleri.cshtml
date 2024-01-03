@@ -1,0 +1,60 @@
+﻿@using YEMEKCI.Models
+@model List<CartItem>
+
+@{
+    ViewBag.title = "SEPET URUNLERI (DISABLED)";
+}
+
+<style>
+    .quantity-control {
+        display: flex;
+        align-items: center;
+    }
+
+        .quantity-control button {
+            font-size: 1rem;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+    .quantity-value {
+        margin: 0 10px;
+    }
+</style>
+
+<h2>SEPET ICERIGI</h2>
+
+<div><a class="btn btn-dark" href="">Sepete Ürün Ekle</a></div>
+
+<div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>SEPET ITEM</th>
+                <th>SEPET ID</th>
+                <th>SEPET KULLANICISI</th>
+                <th>YEMEK</th>
+                <th>ADET</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (CartItem c in Model)
+            {
+                <tr>
+                    <td>@c.ID</td>
+                    <td>@c.cartID</td>
+                    <td>@c.Cart.Customer.name</td>
+                    <td>@c.Dish.name</td>
+                    <td>
+                        <div class="quantity-control">
+                            <button class="decrement" data-id="@c.ID">-</button>
+                            <span id="quantity-@c.ID" class="quantity-value">@c.quantity</span>
+                            <button class="increment" data-id="@c.ID">+</button>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

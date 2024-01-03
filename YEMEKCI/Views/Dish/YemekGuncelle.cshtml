@@ -1,0 +1,52 @@
+﻿@using YEMEKCI.Models
+@model Dish
+
+@{
+    ViewBag.Title = "Yemek Guncelle";
+    Layout = "~/Views/Shared/_LayoutWeb.cshtml";
+}
+
+
+<div style="margin: 40px 50px 0px 50px;">
+
+    <h3 style="font-weight: 600; color:#f8a920; margin-bottom:20px">Yemek Güncelle</h3>
+
+    <form asp-action="/Dish/DishGuncelle" asp-route-id="@Model.ID" method="post">
+
+        <div class="form-group" style="padding-bottom:30px">
+            <label class="pb-1 fw-bold" for="name">İSİM :</label>
+            <input type="text" class="form-control w-25" value="@Model.name " id="name" name="name">
+        </div>
+
+        <div class="form-group" style="padding-bottom:30px">
+            <label class="pb-1 fw-bold" for="unit_price">BİRİM FIYATI:</label>
+            <input type="text" class="form-control" value="@Model.unit_price " id="unit_price" name="unit_price">
+        </div>
+
+        <div class="form-group" style="padding-bottom:30px">
+            <label class="pe-1 fw-bold">Restoranlar:</label>
+            <select class="form-select-list" id="restaurantID" name="restaurantID">
+                @foreach (Restaurant r in ViewBag.restaurants as List<Restaurant>)
+                {
+                    <option value="@r.ID">@r.ID @r.name</option>
+                }
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label class="pe-1 fw-bold">Category:</label>
+            <select class="form-select-list" id="categoryID" name="categoryID">
+                @foreach (Category ca in ViewBag.categories as List<Category>)
+                {
+                    <option value="@ca.ID">@ca.name</option>
+                }
+            </select>
+        </div>
+
+        <div class="form-group form-check"></div>
+
+        <button type="submit" class="btn btn-success">Güncelle</button>
+
+    </form>
+</div>
+

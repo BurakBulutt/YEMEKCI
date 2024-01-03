@@ -1,0 +1,112 @@
+﻿@using YEMEKCI.Models
+@model List<Payment>
+
+
+@{
+    ViewBag.Title = "Ödeme Yöntemleri";
+
+}
+
+
+<div style="margin: 40px 50px 0px 50px;">
+
+    <h3 style="font-weight: 600; color:#f8a920; margin-bottom:20px">Ödeme Yöntemleri</h3>
+
+    <div>
+        <a class="btn btn-dark mt-1 mb-4" href="/Payment/PaymentEkle">Ödeme Yöntemi Ekle</a>
+    </div>
+
+
+    @section head{
+        <style>
+            .hata {
+                color: red;
+            }
+        </style>
+    }
+
+
+    @section body{
+        <!-- Modal -->
+        <div class="modal fade" id="paymentSilModal" tabindex="-1" role="dialog" aria-labelledby="paymentSilModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="paymentSilModalLabel">CUSTOMER SIL</h5>
+                    </div>
+                    <div class="modal-body">
+                        <p class="mesaj"></p>
+                        <p class="hata"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+                        <button type="button" class="btn btn-dark paymentSil">Evet</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    <div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>PAYMENT ADI</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Payment p in Model)
+                {
+                    <tr>
+                        <td>@p.ID</td>
+                        <td>@p.name</td>
+                        <td><a href="#" data-toggle="modal" data-target="#paymentSilModal" data-pID="@p.ID" data-pAdi="@p.name" class="btn btn-danger pSil">Sil</a></td>
+                        <td><a class="btn btn-dark" href="/Payment/PaymentGuncelle/@p.ID">Güncelle</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+@section scripts{
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+    <script>
+        $(".pSil").click(
+            function () {
+                $(".modal-body>p.hata").html = "";
+                var pName = $(this).attr("data-pAdi");
+                $(".modal-body>p.mesaj").html(pName + " silinsin mi?");
+                var pID = $(this).attr("data-pID");
+                $(".paymentSil").data("pID", pID);
+            }
+        );
+
+        $(".paymentSil").click(
+            function () {
+                var id = $(this).data("pID");
+
+                $.ajax(
+                    {
+                        type: "POST",
+                        url: "/Payment/PaymentSil/" + id,
+                        success: function (param) {
+                            if (param == 1) {
+                                window.location.replace("/Customer/Index");
+                            }
+                            else {
+                                $(".modal-body>p.hata").html("Hata !!!");
+                            }
+                        }
+                    }
+                );
+            }
+        );
+    </script>
+
+}

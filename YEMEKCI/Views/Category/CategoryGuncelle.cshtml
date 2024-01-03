@@ -1,0 +1,29 @@
+﻿@using YEMEKCI.Models
+@model Category
+
+@{
+    ViewBag.Title = "Kategori Güncelle";
+
+}
+
+<div style="margin: 40px 50px 0px 50px;">
+
+    <h3 style="font-weight: 600; color:#f8a920; margin-bottom:20px">Kategori Güncelle</h3>
+
+    <form asp-action="/Category/CategoryGuncelle" asp-route-id="@Model.ID" method="post">
+
+        <div class="form-group">
+            <input type="hidden" class="form-control" id="ID" name="ID" value="@Model.ID">
+        </div>
+        <div class="form-group">
+            <label for="name">Kategori İsmi :</label>
+            <input type="text" class="form-control w-25" id="name" name="name" value="@Model.name">
+        </div>
+
+        <div class="form-group form-check"></div>
+
+        <button type="submit" class="btn btn-success">Güncelle</button>
+
+    </form>
+</div>
+

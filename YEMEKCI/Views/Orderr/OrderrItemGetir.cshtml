@@ -1,0 +1,104 @@
+﻿@using YEMEKCI.Models
+@model List<OrderItem>
+
+@{
+    ViewBag.Title = "Sipariş Item Getir";
+    Layout = "~/Views/Shared/_LayoutWeb.cshtml";
+}
+
+<div style="margin: 40px 50px 0px 50px;">
+
+    <h3 style="font-weight: 600; color:#f8a920; margin-bottom:20px">Sipariş İçeriği</h3>
+
+    <div>
+        <a class="btn btn-dark mb-3" href="/Orderr/OrderrItemEkle/@ViewBag.OrderrNO">Ürün Ekle</a>
+    </div>
+
+    @section body{
+        <!-- Modal -->
+        <div class="modal fade" id="siparisItSilModal" tabindex="-1" role="dialog" aria-labelledby="siparisItSilModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="siparisItSilModalLabel">SIPARIS SIL</h5>
+                    </div>
+                    <div class="modal-body">
+                        <p class="mesaj"></p>
+                        <p class="hata"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+                        <button type="button" class="btn btn-dark siparisItSil">Evet</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    }
+
+    <div>
+        <table class="table table-striped">
+            <thead>
+                <tr class="text-decoration-underline">
+                    <th>ID</th>
+                    <th>SIPARIS ID</th>
+                    <th>YEMEK</th>
+                    <th>ADET</th>
+                    <th>Sil</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (OrderItem ot in Model)
+                {
+                    <tr>
+                        <td>@ot.ID</td>
+                        <td>@ot.orderID</td>
+                        <td>@ot.dishID @ot.Dish.name -@ot.Dish.Restaurant.name</td>
+                        <td>@ot.quantity</td>
+                        <td><a href="#" data-toggle="modal" data-target="#siparisItSilModal" data-sprsID="@ot.ID" data-ymkID="@ot.Dish.name" class="btn btn-danger sprstSil">Sil</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section scripts{
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+    <script>
+        $(".sprstSil").click(
+            function () {
+                $(".modal-body>p.hata").html = "";
+                var yemek = $(this).attr("data-ymkID");
+                $(".modal-body>p.mesaj").html(yemek + " siparişten silinsin mi ?");
+                var siparistID = $(this).attr("data-sprsID");
+                $(".siparisItSil").data("siparistID", siparistID);
+            }
+        );
+
+        $(".siparisItSil").click(
+            function () {
+                var id = $(this).data("siparistID");
+
+                $.ajax(
+                    {
+                        type: "POST",
+                        url: "/Orderr/OrderrItemSil/" + id,
+                        success: function (param) {
+                            if (param == 1) {
+                                window.location.replace("/Orderr/OrderrItemGetir/@ViewBag.OrderrNO");
+                            }
+                            else {
+                                $(".modal-body>p.hata").html("Siparis Silinirken Hata Meydana Geldi");
+                            }
+                        }
+                    }
+                );
+            }
+        );
+    </script>
+
+}
+

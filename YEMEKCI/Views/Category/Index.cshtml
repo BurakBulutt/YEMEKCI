@@ -1,0 +1,107 @@
+﻿@using YEMEKCI.Models
+@model List<Category>
+
+
+@{
+    ViewBag.Title = "Kategoriler";
+
+}
+
+<div style="margin: 40px 50px 0px 50px;">
+
+    <h3 style="font-weight: 600; color:#f8a920; margin-bottom:20px">Kategoriler</h3>
+
+    <a class="btn btn-dark mb-3" href="/Category/CategoryEkle">Kategori Ekle</a>
+
+    @section head{
+        <style>
+            .hata {
+                color: red;
+            }
+        </style>
+    }
+
+
+    @section body{
+        <!-- Modal -->
+        <div class="modal fade" id="categorySilModal" tabindex="-1" role="dialog" aria-labelledby="categorySilModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="categorySilModalLabel">CATEGORY SIL</h5>
+                    </div>
+                    <div class="modal-body">
+                        <p class="mesaj"></p>
+                        <p class="hata"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+                        <button type="button" class="btn btn-dark categorySil">Evet</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <table class="table table-striped">
+        <thead>
+            <tr class="text-decoration-underline">
+                <th>KATEGORİ ID</th>
+                <th>KATEGORİ ADI</th>
+                <th>SİL</th>
+                <th>GÜNCELLE</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Category c in Model)
+            {
+                <tr>
+                    <td>@c.ID</td>
+                    <td>@c.name</td>
+                    <td><a href="#" data-toggle="modal" data-target="#categorySilModal" data-ctID="@c.ID" data-ctAdi="@c.name" class="btn btn-danger ctSil">Sil</a></td>
+                    <td><a class="btn btn-success" href="/Category/CategoryGuncelle/@c.ID">Güncelle</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section scripts{
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+    <script>
+        $(".ctSil").click(
+            function () {
+                $(".modal-body>p.hata").html = "";
+                var categoryName = $(this).attr("data-ctAdi");
+                $(".modal-body>p.mesaj").html(categoryName + " silinsin mi?");
+                var ctID = $(this).attr("data-ctID");
+                $(".categorySil").data("ctID", ctID);
+            }
+        );
+
+        $(".categorySil").click(
+            function () {
+                var id = $(this).data("ctID");
+
+                $.ajax(
+                    {
+                        type: "POST",
+                        url: "/Category/CategorySil/" + id,
+                        success: function (param) {
+                            if (param == 1) {
+                                window.location.replace("/Category/Index");
+                            }
+                            else {
+                                $(".modal-body>p.hata").html("Hata !!!");
+                            }
+                        }
+                    }
+                );
+            }
+        );
+    </script>
+
+}
+

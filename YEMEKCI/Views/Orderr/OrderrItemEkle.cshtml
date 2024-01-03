@@ -1,0 +1,38 @@
+﻿@using YEMEKCI.Models
+@model OrderItem
+@{
+    ViewBag.Title = "Sipariş Item Ekle";
+    Layout = "~/Views/Shared/_LayoutWeb.cshtml";
+}
+
+<div style="margin: 40px 50px 0px 50px;">
+
+    <h3 style="font-weight: 600; color:#f8a920; margin-bottom:20px">Ekle</h3>
+
+    <form action="/Orderr/OrderrItemEkle" method="post">
+        <div class="form-group">
+            <label style="font-size: 18px; font-weight: 600; margin-right:6px">Yemekler</label>
+            <select class="form-select-list" id="dishID" name="dishID">
+                @foreach (Dish d in ViewBag.DishOT as List<Dish>)
+                {
+                    <option value="@d.ID">@d.name</option>
+                }
+            </select>
+        </div>
+
+        <div class="form-group" type="hidden">
+            <input type="hidden" class="form-control" value="@Model.orderID" id="orderID" name="orderID">
+        </div>
+
+        <div class="form-group d-flex mt-4 mb-3 align-items-center text-2xl-start">
+            <label for="name" style="font-size: 18px; font-weight: 600; margin-right:10px">Adet :</label>
+            <input type="number" class="form-control w-25" value="1" id="quantity" name="quantity">
+        </div>
+
+        <div class="form-group form-check"></div>
+
+        <button type="submit" class="btn btn-dark">Ekle</button>
+
+    </form>
+</div>
+

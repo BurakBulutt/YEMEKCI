@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="2b03afaad2bb406583dc853539b65bdc" Name="Diagram1">
+        <EntityTypeShape EntityType="YemekciModel.Address" Width="1.5" PointX="3" PointY="1.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="YemekciModel.Cart" Width="1.5" PointX="3" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="YemekciModel.CartItem" Width="1.5" PointX="5.25" PointY="6.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="YemekciModel.Category" Width="1.5" PointX="3" PointY="13.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="YemekciModel.Customer" Width="1.5" PointX="0.75" PointY="4" IsExpanded="true" />
+        <EntityTypeShape EntityType="YemekciModel.Discount" Width="1.5" PointX="3" PointY="7.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="YemekciModel.Dish" Width="1.5" PointX="5.25" PointY="14" IsExpanded="true" />
+        <EntityTypeShape EntityType="YemekciModel.OrderItem" Width="1.5" PointX="7.5" PointY="3.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="YemekciModel.Orderr" Width="1.5" PointX="5.25" PointY="2.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="YemekciModel.Payment" Width="1.5" PointX="3" PointY="10.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="YemekciModel.Restaurant" Width="1.5" PointX="3" PointY="15.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="YemekciModel.Restaurant_Address" Width="1.5" PointX="0.75" PointY="15.5" IsExpanded="true" />
+        <AssociationConnector Association="YemekciModel.fk_addressID_inOrderr" ManuallyRouted="false" />
+        <AssociationConnector Association="YemekciModel.fk_customerID_inCustomers" ManuallyRouted="false" />
+        <AssociationConnector Association="YemekciModel.fk_cartID_inCartItem" ManuallyRouted="false" />
+        <AssociationConnector Association="YemekciModel.fk_customerID_inCarts" ManuallyRouted="false" />
+        <AssociationConnector Association="YemekciModel.fk_dishID_inCartItem" ManuallyRouted="false" />
+        <AssociationConnector Association="YemekciModel.fk_categoryID_inDishs" ManuallyRouted="false" />
+        <AssociationConnector Association="YemekciModel.fk_customerID_inOrderr" ManuallyRouted="false" />
+        <AssociationConnector Association="YemekciModel.fk_dishID_inOrderItemm" ManuallyRouted="false" />
+        <AssociationConnector Association="YemekciModel.fk_restaurantID_inDishs" ManuallyRouted="false" />
+        <AssociationConnector Association="YemekciModel.fk_orderID_inOrderItemm" ManuallyRouted="false" />
+        <AssociationConnector Association="YemekciModel.fk_paymentID_inOrderr" ManuallyRouted="false" />
+        <AssociationConnector Association="YemekciModel.fk_restaurant_addressID" ManuallyRouted="false" />
+        <AssociationConnector Association="YemekciModel.CustomersDiscounts" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

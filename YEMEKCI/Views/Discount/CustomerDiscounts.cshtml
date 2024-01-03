@@ -1,0 +1,31 @@
+﻿@using YEMEKCI.Models
+@model List<Discount>
+@{
+    ViewBag.Title = "Müşteri Kuponları";
+    Layout = "~/Views/Shared/_LayoutWeb.cshtml";
+}
+
+<h2>Müşteri Kuponları</h2>
+
+<div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>KUPON ID</th>
+                <th>KUPON İÇERİĞİ</th>
+                <th>INDIRIM TUTARI</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Discount d in Model)
+            {
+                <tr>
+                    <td>@d.ID</td>
+                    <td>@d.name</td>
+                    <td>@d.discount_rate</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

@@ -1,0 +1,116 @@
+﻿@using YEMEKCI.Models
+@model List<Discount>
+
+@{
+    ViewBag.Title = "KUPONLAR";
+    Layout = "~/Views/Shared/_LayoutWeb.cshtml";
+}
+
+
+<div style="margin: 40px 50px 0px 50px;">
+
+    <h3 style="font-weight: 600; color:#f8a920; margin-bottom:20px">Kuponlar</h3>
+
+    <div class="mb-4 mt-1">
+        <a class="btn btn-dark me-2" href="/Discount/DiscountEkle">Kupon Ekle</a>
+        <a class="btn btn-dark mt" href="/Discount/DiscountTanimlaKullanici">Müşteriye Hediye kuponu Ekle</a>
+    </div>
+
+
+    @section head{
+        <style>
+            .hata {
+                color: red;
+            }
+        </style>
+    }
+
+
+    @section body{
+        <!-- Modal -->
+        <div class="modal fade" id="discountSilModal" tabindex="-1" role="dialog" aria-labelledby="discountSilModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="discountSilModalLabel">CUSTOMER SIL</h5>
+                    </div>
+                    <div class="modal-body">
+                        <p class="mesaj"></p>
+                        <p class="hata"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+                        <button type="button" class="btn btn-dark discountSil">Evet</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    <div>
+        <table class="table table-striped">
+            <thead>
+                <tr class="text-decoration-underline">
+                    <th>ID</th>
+                    <th>AD</th>
+                    <th>INDIRIM ORANI</th>
+                    <th>SIL</th>
+                    <th>GUNCELLE</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Discount d in Model)
+                {
+                    <tr>
+                        <td>@d.ID</td>
+                        <td>@d.name</td>
+                        <td>@d.discount_rate</td>
+                        <td><a href="#" data-toggle="modal" data-target="#discountSilModal" data-dstID="@d.ID" data-dstAdi="@d.name" class="btn btn-danger dstSil">Sil</a></td>
+                        <td><a class="btn btn-dark" href="/Discount/DiscountGuncelle/@d.ID">Güncelle</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+
+@section scripts{
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+    <script>
+        $(".dstSil").click(
+            function () {
+                $(".modal-body>p.hata").html = "";
+                var disName = $(this).attr("data-dstAdi");
+                $(".modal-body>p.mesaj").html(disName + " silinsin mi?");
+                var disID = $(this).attr("data-dstID");
+                $(".discountSil").data("disID", disID);
+            }
+        );
+
+        $(".discountSil").click(
+            function () {
+                var id = $(this).data("disID");
+
+                $.ajax(
+                    {
+                        type: "POST",
+                        url: "/Discount/DiscountSil/" + id,
+                        success: function (param) {
+                            if (param == 1) {
+                                window.location.replace("/Discount/Index");
+                            }
+                            else {
+                                $(".modal-body>p.hata").html("Hata !!!");
+                            }
+                        }
+                    }
+                );
+            }
+        );
+    </script>
+
+}
+

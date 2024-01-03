@@ -1,0 +1,24 @@
+﻿
+@{
+    ViewBag.Title = "Restoran Siparisleri Giris";
+    Layout = "~/Views/Shared/_LayoutWeb.cshtml";
+}
+
+<div style="margin: 40px 50px 0px 50px;">
+
+    <h3 style="font-weight: 600; color:#f8a920; margin-bottom:20px">Restoran Siparişleri Giriş</h3>
+
+    <form action="/Orderr/RestoranSiparisleri" method="get">
+
+        <div class="form-group">
+            <label class="pb-1 fw-bold" for="id">RESTORAN NUMARANIZI GİRİNİZ :</label>
+            <input type="number" class="form-control w-25" value="0" id="id" name="id">
+        </div>
+
+        <div class="form-group form-check"></div>
+
+        <button type="submit" class="btn btn-dark">GİRİS YAP</button>
+
+    </form>
+
+</div>

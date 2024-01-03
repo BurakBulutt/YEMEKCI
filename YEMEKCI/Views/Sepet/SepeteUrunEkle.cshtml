@@ -1,0 +1,36 @@
+﻿@using YEMEKCI.Models
+@model CartItem
+
+@{
+    ViewBag.title = "Sepete Urun Ekle";
+}
+
+<form action="/Sepet/SepeteUrunEkle" method="post">
+    <div class="form-group">
+        <label>Yemekler</label>
+        <select class="form-select-list" id="dishID" name="dishID">
+            @foreach (Dish d in ViewBag.dishes as List<Dish>)
+            {
+                <option value="@d.ID">@d.name</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group" type="hidden">
+        <input type="hidden" class="form-control" value="@Model.cartID " id="cartID" name="cartID">
+    </div>
+
+    <div class="form-group">
+        <label for="name">Adet :</label>
+        <input type="number" class="form-control" value="1" id="quantity" name="quantity"readonly>
+    </div>
+
+    <div class="form-group form-check"></div>
+
+    <button type="submit" class="btn btn-dark">Ekle</button>
+
+</form>
+
+
+
+

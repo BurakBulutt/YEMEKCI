@@ -1,0 +1,97 @@
+﻿@using YEMEKCI.Models
+@model Customer
+
+
+@{
+    ViewBag.Title = "Müşteri Güncelle";
+
+}
+
+
+<div style="margin: 40px 50px 0px 50px;">
+
+    <h3 style="font-weight: 600; color:#f8a920; margin-bottom:20px">Müşteri Güncelle</h3>
+
+
+    <div>
+        <form asp-action="/Customer/CustomerGuncelle" asp-route-id="@Model.ID" method="post">
+
+            <div class="form-group">
+                <input type="hidden" class="form-control" id="ID" name="ID" value="@Model.ID">
+            </div>
+
+            <div style="display:flex; gap:0px 30px;">
+                <div class="form-group">
+                    <label class="pb-1 fw-bold" for="name">Ad:</label>
+                    <input type="text" class="form-control py-2" id="name" name="name" style="outline:none;" value="@Model.name">
+                </div>
+                <div class="form-group">
+                    <label class="pb-1 fw-bold" for="surname">Soyad:</label>
+                    <input type="text" class="form-control py-2" id="surname" name="surname" value="@Model.surname">
+                </div>
+            </div>
+
+            <div style="display:flex; gap:0px 30px; padding-top:30px">
+                <div class="form-group">
+                    <label class="fw-bold pb-1" for="email">E-Mail:</label>
+                    <input style="width:300px" type="text" class="form-control py-2" id="email" name="email" value="@Model.email">
+                </div>
+                <div class="form-group ">
+                    <label class="pb-1 fw-bold" for="birthdate">Doğum Tarihi:</label>
+                    <input type="text" class="form-control py-2" id="birthdate" name="birthdate" value="@Model.birthdate">
+                </div>
+
+            </div>
+
+
+            <div class="form-group" style="padding-top:30px">
+                <label class="fw-bold pb-1" for="password">Şifre:</label>
+                <input type="text" class="form-control py-2 w-25" id="password" name="password" value="@Model.password">
+            </div>
+
+
+            <div class="form-group form-check"></div>
+
+            <button type="submit" class="btn btn-success px-4 mt-3">Güncelle</button>
+
+        </form>
+    </div>
+</div>
+
+
+
+
+    @*<h2>Müşteri Güncelle</h2>
+
+    <form asp-action="/Customer/CustomerGuncelle" asp-route-id="@Model.ID" method="post">
+
+        <div class="form-group">
+            <input type="hidden" class="form-control" id="ID" name="ID" value="@Model.ID">
+        </div>
+        <div class="form-group">
+            <label for="name">İsim:</label>
+            <input type="text" class="form-control" id="name" name="name" value="@Model.name">
+        </div>
+        <div class="form-group">
+            <label for="surname">Soy İsim:</label>
+            <input type="text" class="form-control" id="surname" name="surname" value="@Model.surname">
+        </div>
+        <div class="form-group">
+            <label for="birthdate">Doğum Tarihi:</label>
+            <input type="text" class="form-control" id="birthdate" name="birthdate" value="@Model.birthdate">
+        </div>
+        <div class="form-group">
+            <label for="email">E-Mail:</label>
+            <input type="text" class="form-control" id="email" name="email" value="@Model.email">
+        </div>
+        <div class="form-group">
+            <label for="password">Şifre:</label>
+            <input type="text" class="form-control" id="password" name="password" value="@Model.password">
+        </div>
+
+        <div class="form-group form-check">
+        </div>
+        <button type="submit" class="btn btn-dark">Güncelle</button>
+
+    </form>*@
+

@@ -1,0 +1,133 @@
+﻿@using YEMEKCI.Models
+@model List<Customer>
+
+
+@{
+    ViewBag.Title = "Müşteriler";
+
+}
+
+<div style="margin: 40px 50px 0px 50px;">
+
+    <h3 style="font-weight: 600; color:#f8a920; margin-bottom:20px">Müşteriler</h3>
+
+
+    <div>
+        <a class="btn btn-dark mb-4 mt-1" href="/Customer/CustomerEkle">Yeni Müşteri Ekle</a>
+    </div>
+
+
+    @section head{
+        <style>
+            .hata {
+                color: red;
+            }
+        </style>
+    }
+
+
+    @section body{
+        <!-- Modal -->
+        <div class="modal fade" id="customerSilModal" tabindex="-1" role="dialog" aria-labelledby="customerSilModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="customerSilModalLabel">CUSTOMER SIL</h5>
+                    </div>
+                    <div class="modal-body">
+                        <p class="mesaj"></p>
+                        <p class="hata"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+                        <button type="button" class="btn btn-dark customerSil">Evet</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    <div>
+        <table class="table table-striped">
+            <thead>
+                <tr class="text-decoration-underline">
+                    <th>MÜŞTERİ ID</th>
+                    <th>ADI</th>
+                    <th>SOYADI</th>
+                    <th>DOĞUM TARİHİ</th>
+                    <th>MAİL ADRESİ</th>
+                    <th>ŞİFRESİ</th>
+                    <th>Sİl</th>
+                    <th>GÜNCELLE</th>
+                    <th>KUPONLAR</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (Customer c in Model)
+                {
+                    <tr>
+                        <td>@c.ID</td>
+                        <td>@c.name</td>
+                        <td>@c.surname</td>
+                        <td>@c.birthdate</td>
+                        <td>@c.email</td>
+                        <td>@c.password</td>
+                        <td><a href="#" data-toggle="modal" data-target="#customerSilModal" data-cstID="@c.ID" data-cstAdi="@c.name" data-cstSoyAdi="@c.surname" class="btn btn-danger cstSil">Sil</a></td>
+                        <td><a class="btn btn-success" href="/Customer/CustomerGuncelle/@c.ID">Güncelle</a></td>
+                        <td><a class="btn btn-dark" href="/Discount/CustomerDiscounts/@c.ID">Kuponları Görüntüle</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+
+@section scripts{
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+    <script>
+        $(".cstSil").click(
+            function () {
+                $(".modal-body>p.hata").html = "";
+                var customerName = $(this).attr("data-cstAdi");
+                var customerSurname = $(this).attr("data-cstSoyAdi");
+                $(".modal-body>p.mesaj").html(customerName + " " + customerSurname + " silinsin mi?");
+                var customerID = $(this).attr("data-cstID");
+                $(".customerSil").data("customerID", customerID);
+            }
+        );
+
+        $(".customerSil").click(
+            function () {
+                var id = $(this).data("customerID");
+
+                $.ajax(
+                    {
+                        type: "POST",
+                        url: "/Customer/CustomerSil/" + id,
+                        success: function (param) {
+                            if (param == 1) {
+                                window.location.replace("/Customer/Index");
+                            }
+                            else {
+                                $(".modal-body>p.hata").html("Hata !!!");
+                            }
+                        }
+                    }
+                );
+            }
+        );
+    </script>
+
+}
+
+
+
+
+
+
+
+

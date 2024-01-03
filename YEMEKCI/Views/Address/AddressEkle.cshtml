@@ -1,0 +1,53 @@
+﻿@using YEMEKCI.Models
+@model Address
+@{
+    ViewBag.Title = "Adres Ekle";
+}
+
+<div style="margin: 40px 50px 0px 50px;">
+
+    <h3 style="font-weight: 600; color:#f8a920; margin-bottom:20px">Adres Ekle</h3>
+
+    <form action="/Address/AddressEkle" method="post">
+
+        <div class="form-group">
+            <input type="hidden" class="form-control" value="@Model.ID" id="ID" name="ID">
+        </div>
+
+        <div class="form-group" style="padding-bottom:30px">
+            <label class="pb-1 fw-bold"  for="name">Şehir :</label>
+            <input type="text" class="form-control w-25" value="@Model.city " id="city" name="city">
+        </div>
+
+        <div class="form-group" style="padding-bottom:30px">
+            <label class="pb-1 fw-bold"  for="name">İlçe :</label>
+            <input type="text" class="form-control w-25" value="@Model.district " id="district" name="district">
+        </div>
+
+        <div class="form-group" style="padding-bottom:30px">
+            <label class="pb-1 fw-bold"  for="name">Posta Kodu :</label>
+            <input type="text" class="form-control w-25" value="@Model.postalCode " id="postalCode" name="postalCode">
+        </div>
+
+        <div class="form-group" style="padding-bottom:30px">
+            <label class="pb-1 fw-bold"  for="name">Açık Adres :</label>
+            <input type="text" class="form-control w-50" value="@Model.address1 " id="address1" name="address1">
+        </div>
+
+        <div class="form-group">
+            <label  class="pe-1 fw-bold" >Kullanıcılar</label>
+            <select class="form-select-list" id="customerID" name="customerID">
+                @foreach (Customer c in ViewBag.customersForAddress as List<Customer>)
+                {
+                    <option value="@c.ID">@c.ID/@c.name @c.surname</option>
+                }
+            </select>
+        </div>
+
+        <div class="form-group form-check"></div>
+
+        <button type="submit" class="btn btn-success">Ekle</button>
+
+    </form>
+
+</div>
