@@ -220,7 +220,10 @@ namespace YEMEKCI.Controllers
                 {
                     indirimOrani = orderr.total_Amaount;
                 }
-                customer.Discount.Remove(discount);
+                if(!(discount.discount_rate == 0))
+                {
+                    customer.Discount.Remove(discount);
+                }
             }
 
             orderr.paymentID = selectedPaymentID;

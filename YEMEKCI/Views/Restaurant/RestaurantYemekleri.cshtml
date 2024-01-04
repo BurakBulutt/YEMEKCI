@@ -43,7 +43,7 @@
 
 
 
-    <div style="display:flex; gap:40px;">
+    <div style="display:flex; flex-wrap:wrap; gap:130px;">
 
         @if (ViewBag.yemeksler.Count == 0)
         {
@@ -57,7 +57,7 @@
                 string[] userData = authTicket.UserData.Split('|'); // Kullanıcıya özgü verileri ayrıştır
                 int userID = int.Parse(userData[2]);
 
-                <div class="shadow rounded-3">
+                <div class="shadow rounded-3 gap:0px 30px">
                     <img style="width:350px; height:200px; padding:20px 35px 20px 35px; border-radius:38px" src="~/Admin_Contents/assets/img/restoran.jpg">
                     <div>
                         <div class="text-center my-3">

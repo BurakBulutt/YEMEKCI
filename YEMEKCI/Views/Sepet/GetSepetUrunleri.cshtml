@@ -75,20 +75,6 @@
         </div>
     }
 
-    @*<div>
-        @if (User.IsInRole("A"))
-        {
-            <a class="btn btn-dark" href="/Sepet/SepeteUrunEkle/@ViewBag.idcan">Sepete Ürün Ekle</a>
-        }
-        else
-        {
-            <a class="btn btn-dark" href="/AnaSayfa/Index">AnaSayfa Dön</a>
-        }
-        <a class="btn btn-danger sepetBosalt" data-toggle="modal" data-target="#sepetiBosaltModal" data-sptIDCAN="@ViewBag.idcan" href="#">Sepeti Boşalt</a>
-    </div>*@
-
-
-
     <div>
         <table class="table table-striped">
             <thead>
@@ -147,6 +133,15 @@
                 <button class="btn btn-dark ms-5" style="margin-top:-5px" type="submit">Sipariş Oluştur</button>
             </form>
 
+                @if (User.IsInRole("A"))
+                {
+                    <a class="btn btn-dark" href="/Sepet/SepeteUrunEkle/@ViewBag.idcan">Sepete Ürün Ekle</a>
+                }
+                else
+                {
+                    <a class="btn btn-dark" href="/AnaSayfa/Index">AnaSayfa Dön</a>
+                }
+                <a class="btn btn-danger sepetBosalt" data-toggle="modal" data-target="#sepetiBosaltModal" data-sptIDCAN="@ViewBag.idcan" href="#">Sepeti Boşalt</a>
         </div>
     </div>
 

@@ -39,11 +39,6 @@ public class SuperAdminCreator
             model.Discount.Add(discount);
             model.SaveChanges();
 
-            foreach (Customer customer in model.Customer.ToList())
-            {
-                customer.Discount.Add(discount);
-
-            }
         }
         model.SaveChanges();
     }

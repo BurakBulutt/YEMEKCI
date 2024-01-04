@@ -92,6 +92,11 @@
                             <select name="selectedDiscountID">
                                 @foreach (Discount kupon in ViewBag.discountO as List<Discount>)
                                 {
+                                    if (kupon.discount_rate == 0)
+                                    {
+                                        <option style="color : red" value="@kupon.ID">@kupon.name</option>
+
+                                    }
                                     <option value="@kupon.ID">@kupon.name</option>
                                 }
                             </select>

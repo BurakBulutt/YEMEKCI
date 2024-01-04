@@ -40,8 +40,10 @@ namespace YEMEKCI.Controllers
             //Sisteme müşteri eklendiğinde bu müşteriye ait bir sepet te oluşmalıdır.
             Cart cart = new Cart();
             cart.customerID = customer.ID;
+            Discount d = model.Discount.FirstOrDefault(x => x.discount_rate == 0);
 
             model.Cart.Add(cart);
+            model.Discount.Add(d);
             model.SaveChanges();
             return RedirectToAction("Index");                 
         }

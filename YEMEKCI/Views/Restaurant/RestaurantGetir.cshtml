@@ -11,7 +11,7 @@
 
     <h3 style="font-weight: 600; color:#f8a920; margin-bottom:20px">Restoranlar </h3>
 
-    <div style="display:flex; gap:40px;">
+    <div style="display:flex; flex-wrap:wrap; gap:130px;">
 
         @if (Model.Count == 0)
         {
@@ -22,7 +22,7 @@
             foreach (Restaurant r in Model)
             {
 
-                <div class="shadow rounded-3">
+                <div class="shadow rounded-3 gap:0px 10px">
                     <img style="width:350px; height:200px; padding:20px 35px 20px 35px; border-radius:38px" src="~/Admin_Contents/assets/img/restoran.jpg">
                     <div>
                         <div class="text-center my-3">
